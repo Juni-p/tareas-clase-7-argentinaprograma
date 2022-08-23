@@ -12,7 +12,7 @@ function validarNombre(nombre) {
 }
 
 function validarCiudad(ciudad) {
-  if (ciudad.length === 0) {
+  if (ciudad === "") {
     return "Este campo debe tener una ciudad seleccionada";
   }
   return "";
@@ -64,21 +64,29 @@ function validarFormulario(event) {
 
 function manejarErrores(errores) {
   const llaves = Object.keys(errores);
+  const $errores = document.querySelector("#errores");
+  $errores.innerHTML = "";
+
   let contadorErrores = 0;
 
   llaves.forEach(function (llave) {
     const error = errores[llave];
-    const $errores = document.querySelector("#errores");
 
     if (error) {
       contadorErrores++;
       document.formulario[llave].classList.add("error");
 
       const $error = document.createElement("li");
+      $error.classList.add(llave);
       $error.textContent = error;
       $errores.appendChild($error);
     } else {
-      $errores.innerHTML = "";
+      const $errorItems = document.querySelectorAll("#errores > li");
+      for (let i = 0; i < $errorItems.length; i++) {
+        if ($errorItems[i].classList.contains(llave)) {
+          $errorItems[i].remove();
+        }
+      }
       document.formulario[llave].classList.remove("error");
     }
   });
